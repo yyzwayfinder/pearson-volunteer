@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="YYZ Volunteer">
+  <meta name="theme-color" content="#0d1f5c">
+  <title>YYZ Volunteer Guide</title>
+  <style>
+    :root {
+      --navy:   #0d1f5c;
+      --navy2:  #0a1847;
+      --lime:   #c8e01a;
+      --blue:   #3b7dd8;
+      --red:    #e03a2f;
+      --white:  #ffffff;
+      --offwhite: #f0f4ff;
+      --card:   #162468;
+      --card2:  #1a2b72;
+      --muted:  rgba(255,255,255,0.55);
+      --border: rgba(255,255,255,0.10);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy2);
+      padding: 14px 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .header-top .wordmark {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .header-top .wordmark span {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stripe-bar {
+      display: flex;
+      height: 3px;
+      gap: 2px;
+      margin-bottom: -1px;
+    }
+    .stripe-bar div { flex: 1; border-radius: 2px 2px 0 0; }
+    .stripe-bar .s-lime { background: var(--lime); }
+    .stripe-bar .s-blue { background: var(--blue); }
+    .stripe-bar .s-red  { background: var(--red); }
+
+    /* ── TERMINAL TABS ── */
+    .tabs {
+      display: flex;
+      background: var(--navy2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 13px 8px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      letter-spacing: 0.02em;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tab.active {
+      color: var(--lime);
+      border-bottom-color: var(--lime);
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      padding: 16px 14px 40px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .terminal-panel { display: none; }
+    .terminal-panel.active { display: block; }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 20px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      background: var(--card);
+      border-radius: var(--radius) var(--radius) 0 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      border-left: 3px solid var(--lime);
+    }
+
+    .section-header.collapsed {
+      border-radius: var(--radius);
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--lime);
+    }
+
+    .chevron {
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 0.2s;
+    }
+
+    .section-header.collapsed .chevron { transform: rotate(-90deg); }
+
+    .section-body {
+      background: var(--card2);
+      border-radius: 0 0 var(--radius) var(--radius);
+      overflow: hidden;
+    }
+
+    /* ── LEVEL GUIDE ── */
+    .level-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .level-row:last-child { border-bottom: none; }
+
+    .level-badge {
+      background: var(--navy);
+      color: var(--lime);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 7px;
+      border-radius: 6px;
+      min-width: 34px;
+      text-align: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      letter-spacing: 0.02em;
+    }
+
+    .level-info { flex: 1; }
+    .level-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 3px;
+    }
+    .level-detail {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── TRANSPORT ROWS ── */
+    .transport-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .transport-row:last-child { border-bottom: none; }
+
+    .transport-type {
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white);
+      width: 38%;
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      line-height: 1.4;
+    }
+
+    .transport-type .t-sub {
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .transport-dest {
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--offwhite);
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .transport-row.highlight .transport-type { color: var(--lime); }
+
+    /* ── TWO-COL TRANSIT ── */
+    .transit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .transit-col {
+      padding: 10px 12px;
+      border-right: 1px solid var(--border);
+    }
+    .transit-col:last-child { border-right: none; }
+
+    .transit-col-header {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--lime);
+      margin-bottom: 6px;
+    }
+
+    .transit-col-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .transit-item {
+      font-size: 12px;
+      color: var(--offwhite);
+      padding: 2px 0;
+      line-height: 1.4;
+    }
+
+    /* ── AMENITY / FNB TABLE ── */
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 9px 14px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row:nth-child(even) { background: rgba(255,255,255,0.03); }
+
+    .info-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--white);
+      width: 38%;
+      flex-shrink: 0;
+      padding-right: 10px;
+      line-height: 1.4;
+    }
+
+    .info-right { flex: 1; }
+
+    .info-location {
+      font-size: 12px;
+      color: var(--lime);
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .info-location.absent {
+      color: #ff6b6b;
+    }
+
+    .info-notes {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    /* ── AC CHECK-IN CARD ── */
+    .checkin-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 20px;
+      border-left: 3px solid var(--blue);
+    }
+
+    .checkin-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+
+    .checkin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .checkin-item {
+      background: rgba(255,255,255,0.07);
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      text-align: center;
+    }
+
+    .checkin-type {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 3px;
+    }
+
+    .checkin-aisle {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    /* ── US PRECLEARANCE CARD (T3) ── */
+    .preclear-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 20px;
+      border-left: 3px solid var(--red);
+    }
+
+    .preclear-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+
+    .preclear-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .preclear-item {
+      background: rgba(255,255,255,0.07);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      text-align: center;
+    }
+
+    .preclear-dest {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .preclear-gate {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.3;
+    }
+
+    .preclear-note {
+      font-size: 10px;
+      color: #ff9999;
+      margin-top: 8px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 0 16px 32px;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="wordmark">
+      Toronto Pearson
+      <span>Volunteer Quick Reference</span>
+    </div>
+  </div>
+  <div class="stripe-bar">
+    <div class="s-lime"></div>
+    <div class="s-blue"></div>
+    <div class="s-red"></div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('t1')">✈ Terminal 1</div>
+    <div class="tab" onclick="switchTab('t3')">✈ Terminal 3</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══════════════ TERMINAL 1 ══════════════ -->
+  <div id="t1" class="terminal-panel active">
+
+    <!-- AC Check-In -->
+    <div class="checkin-card">
+      <div class="checkin-title">✈ Air Canada Check-In Split · L3</div>
+      <div class="checkin-grid">
+        <div class="checkin-item">
+          <div class="checkin-type">Domestic</div>
+          <div class="checkin-aisle">Aisle 2</div>
+        </div>
+        <div class="checkin-item">
+          <div class="checkin-type">International</div>
+          <div class="checkin-aisle">Aisle 5</div>
+        </div>
+        <div class="checkin-item">
+          <div class="checkin-type">US Transborder</div>
+          <div class="checkin-aisle">Aisle 12</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level Guide -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🏢 Level Guide</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="level-row">
+          <div class="level-badge">G</div>
+          <div class="level-info">
+            <div class="level-name">Ground</div>
+            <div class="level-detail">Ground transport exits · Lost &amp; Found · Public transit · Uber (Door Q) · Pet relief (Door S)</div>
+          </div>
+        </div>
+        <div class="level-row">
+          <div class="level-badge">L1</div>
+          <div class="level-info">
+            <div class="level-name">Arrivals</div>
+            <div class="level-detail">Baggage claim · Taxis · Limos · GoodLife Fitness · Chapel · CIBC</div>
+          </div>
+        </div>
+        <div class="level-row">
+          <div class="level-badge">L2</div>
+          <div class="level-info">
+            <div class="level-name">West Bridge / South Bridge</div>
+            <div class="level-detail">Bridges to parking garage, car rentals and Terminal Link/UPX (West Bridge) · DrugSmart Pharmacy · Walk-in Clinic</div>
+          </div>
+        </div>
+        <div class="level-row">
+          <div class="level-badge">L3</div>
+          <div class="level-info">
+            <div class="level-name">Departures / Check-In</div>
+            <div class="level-detail">Check-in aisles · Security checkpoints · Baggage wrapping · Rest Zone (Aisle 15)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Curbside Transport -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🚗 Curbside Transport</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="transport-row highlight">
+          <div class="transport-type">🚗 UberX / Lyft / Hopp<span class="t-sub"><br>Standard</span></div>
+          <div class="transport-dest">Ground (G) – Door Q</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🚘 Uber Black / Lyft Lux<span class="t-sub"><br>Premium</span></div>
+          <div class="transport-dest">L1 Arrivals – Door A (Inner Curb)</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🚕 On-Demand Taxi</div>
+          <div class="transport-dest">L1 Arrivals – Door D</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🚐 Limo (on-demand)</div>
+          <div class="transport-dest">L1 Arrivals – Door C</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🏨 Hotel Shuttles</div>
+          <div class="transport-dest">L1 Arrivals – Door E</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🅿 Off-Airport Parking</div>
+          <div class="transport-dest">Domestic: Door A, Post A1 | Intl: Door E, Post E3</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🚗 Pre-Arranged Car</div>
+          <div class="transport-dest">Pre-arranged Desk inside Door A → curbside Door A</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🚗 Rental Cars</div>
+          <div class="transport-dest">South Bridge (L2) – cross pedestrian bridge to parking garage</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ground Transit -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🚌 Ground Transit &amp; Intercity Coaches</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="transit-grid">
+          <div class="transit-col">
+            <div class="transit-col-header">Public Transit</div>
+            <div class="transit-col-sub">Ground Level – Door R</div>
+            <div class="transit-item">TTC</div>
+            <div class="transit-item">GO Bus</div>
+            <div class="transit-item">MiWay</div>
+            <div class="transit-item">Brampton Transit</div>
+          </div>
+          <div class="transit-col">
+            <div class="transit-col-header">Intercity Coaches</div>
+            <div class="transit-col-sub">Ground Level – Door P</div>
+            <div class="transit-item">FlixBus</div>
+            <div class="transit-item">Megabus</div>
+            <div class="transit-item">AC Landline</div>
+            <div class="transit-item">OurBus / OneXBus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services & Amenities -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🛠 Services &amp; Amenities</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="info-row">
+          <div class="info-label">🏥 Lost &amp; Found</div>
+          <div class="info-right">
+            <div class="info-location">Ground (G) – Doors R &amp; S</div>
+            <div class="info-notes">Mon–Fri 10am–6pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🧳 Baggage Storage</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals – Domestic</div>
+            <div class="info-notes">Daily 5am–11pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🎁 Baggage Wrapping</div>
+          <div class="info-right">
+            <div class="info-location">L3 Departures – Near Aisles 2, 7 &amp; 13</div>
+            <div class="info-notes">Daily 5am–midnight</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">💊 Pharmacy / Clinic</div>
+          <div class="info-right">
+            <div class="info-location">L2 – DrugSmart</div>
+            <div class="info-notes">M–F 8am–9pm · Sat–Sun 9am–7pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🏋 GoodLife Fitness</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals – Intl Arrivals</div>
+            <div class="info-notes">M–F 6am–8pm · Sat–Sun 8am–6pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🏦 CIBC Bank &amp; SIMs</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals – Near Door D</div>
+            <div class="info-notes">Mon–Sat 8am–8pm · Sun 11am–6pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">💱 ICE Currency</div>
+          <div class="info-right">
+            <div class="info-location">L3 Departures – Near Aisle 6</div>
+            <div class="info-notes">Daily 4am–11pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🕌 Multi-Faith Chapel</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals – Public area</div>
+            <div class="info-notes">Open 24/7 · Prayer mats + Qibla</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">😴 Rest Zone</div>
+          <div class="info-right">
+            <div class="info-location">L3 Departures – Aisle 15</div>
+            <div class="info-notes">Open 24/7 · Recliners + benches</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🐾 Pet Relief</div>
+          <div class="info-right">
+            <div class="info-location">Ground (G) – Outdoors near Door S</div>
+            <div class="info-notes">Turf + waste bags</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">♿ Assisted Changeroom</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals – Domestic</div>
+            <div class="info-notes">Intercom entry · Bring own sling</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">✈️ NEXUS Enrollment</div>
+          <div class="info-right">
+            <div class="info-location">L3 Departures – Near Aisle 8</div>
+            <div class="info-notes">Appointment required · Next to Peel Police</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🚬 Smoking / Vaping</div>
+          <div class="info-right">
+            <div class="info-location">Outdoors – designated green zones only</div>
+            <div class="info-notes">Ground (G): Door P (Post P1) · East of Door S (Post S7)<br>L1 Arrivals: Column E3<br>Cannabis prohibited on all airport property</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food & Beverage -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🍽 Food &amp; Beverage (pre-security)</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="info-row">
+          <div class="info-label">☕ Tim Hortons</div>
+          <div class="info-right">
+            <div class="info-location">Ground (G) – Comfort Zone</div>
+            <div class="info-notes">Coffee, donuts, Jamaican beef patties, hot breakfast · Daily 6:30am–7pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">☕ Tim Hortons</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals</div>
+            <div class="info-notes">Coffee, bagels, sandwiches, snacks</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">☕ Starbucks</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals</div>
+            <div class="info-notes">Espresso drinks, teas, pastries, snacks</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🍺 Henderson's</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals</div>
+            <div class="info-notes">Canadian craft beer, wine, snacks — good passenger meet-up spot</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🥖 Subway</div>
+          <div class="info-right">
+            <div class="info-location">South Bridge (L2)</div>
+            <div class="info-notes">Sandwiches and salads, made to order</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /t1 -->
+
+
+  <!-- ══════════════ TERMINAL 3 ══════════════ -->
+  <div id="t3" class="terminal-panel">
+
+    <!-- US Preclearance -->
+    <div class="preclear-card">
+      <div class="preclear-title">⚡ US Preclearance Security Split</div>
+      <div class="preclear-grid">
+        <div class="preclear-item">
+          <div class="preclear-dest">USA Departures</div>
+          <div class="preclear-gate">Security A<br><span style="font-size:11px;font-weight:400;color:var(--muted)">Far WEST, L2</span></div>
+        </div>
+        <div class="preclear-item">
+          <div class="preclear-dest">Domestic / Intl</div>
+          <div class="preclear-gate">Security B/C<br><span style="font-size:11px;font-weight:400;color:var(--muted)">Centre, L2</span></div>
+        </div>
+      </div>
+      <div class="preclear-note">⚠ Wrong security checkpoint = sent back, losing valuable time</div>
+    </div>
+
+    <!-- Level Guide -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🏢 Level Guide</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="level-row">
+          <div class="level-badge">L1</div>
+          <div class="level-info">
+            <div class="level-name">Arrivals</div>
+            <div class="level-detail">Baggage claim · Customs exits · Chapel · Ground transport doors · Tim Hortons · Subway · Smoke's</div>
+          </div>
+        </div>
+        <div class="level-row">
+          <div class="level-badge">L2</div>
+          <div class="level-info">
+            <div class="level-name">Departures</div>
+            <div class="level-detail">Check-in Zones 1–5 · Security A (USA) &amp; B/C (Dom/Intl) · ICE Currency · Starbucks · Freshii · Wendy's</div>
+          </div>
+        </div>
+        <div class="level-row">
+          <div class="level-badge">L3</div>
+          <div class="level-info">
+            <div class="level-name">Transit Corridor</div>
+            <div class="level-detail">Sheraton Gateway walkway · Terminal Link Train (free 24/7 to T1/UP Express &amp; Viscount Station)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Curbside Transport -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🚗 Curbside Transport</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="transport-row highlight">
+          <div class="transport-type">🚗 Uber / Lyft / Hopp<span class="t-sub"><br>Standard</span></div>
+          <div class="transport-dest">L1 Arrivals – Door D · cross first roadway to blue curb (Zone 3–6)</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🚘 Uber Black / Lyft Lux<span class="t-sub"><br>Premium</span></div>
+          <div class="transport-dest">L1 Arrivals – Door A (curbside)</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🚕 On-Demand Taxi &amp; Limo</div>
+          <div class="transport-dest">L1 Arrivals – Door E (outer curb)</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🏨 Hotel Shuttles</div>
+          <div class="transport-dest">L1 Arrivals – Doors B and G</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🅿 Off-Airport Parking</div>
+          <div class="transport-dest">L1 Arrivals – Door B</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🚗 Pre-Arranged Car</div>
+          <div class="transport-dest">Pre-arranged Desk inside Door A → meet driver outside</div>
+        </div>
+        <div class="transport-row">
+          <div class="transport-type">🚗 Rental Cars</div>
+          <div class="transport-dest">Parking Garage L1 (follow signs) · Avis, Budget, Dollar, Thrifty, Enterprise, Hertz, National, Alamo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ground Transit -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🚌 Ground Transit &amp; Intercity Coaches</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="transit-grid">
+          <div class="transit-col">
+            <div class="transit-col-header">TTC Direct</div>
+            <div class="transit-col-sub">L1 Arrivals – Door B</div>
+            <div class="transit-item">TTC 900 Airport Express</div>
+            <div class="transit-item">TTC 52 / 952 Lawrence West</div>
+          </div>
+          <div class="transit-col">
+            <div class="transit-col-header">Link Train to T1</div>
+            <div class="transit-col-sub">All others → L3 Link Train</div>
+            <div class="transit-item">GO Bus</div>
+            <div class="transit-item">MiWay</div>
+            <div class="transit-item">Brampton Transit</div>
+            <div class="transit-item">Megabus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services & Amenities -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🛠 Services &amp; Amenities</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="info-row">
+          <div class="info-label">🏥 Lost &amp; Found</div>
+          <div class="info-right">
+            <div class="info-location absent">NONE IN T3 — send to T1</div>
+            <div class="info-notes">Take Link Train (L3) to T1</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🧳 Baggage Storage</div>
+          <div class="info-right">
+            <div class="info-location">L2 Departures</div>
+            <div class="info-notes">Next to departures escalator &amp; lift · Daily 5am–9pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🎁 Baggage Wrapping</div>
+          <div class="info-right">
+            <div class="info-location">L2 Departures – Zone 5</div>
+            <div class="info-notes">Daily 7:30am–10:30pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🕌 Multi-Faith Chapel</div>
+          <div class="info-right">
+            <div class="info-location">L1 – Domestic Baggage</div>
+            <div class="info-notes">Open 24/7 · Prayer mats + Qibla</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">💱 ICE Currency</div>
+          <div class="info-right">
+            <div class="info-location">L2 – Departures Hall</div>
+            <div class="info-notes">Daily 4am–11pm</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🐾 Pet Relief</div>
+          <div class="info-right">
+            <div class="info-location">L1 – Outdoors near Door A</div>
+            <div class="info-notes">Turf + waste bags</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">♿ Accessible Changeroom</div>
+          <div class="info-right">
+            <div class="info-location">L1 – Domestic Arrivals</div>
+            <div class="info-notes">Intercom entry · Bring own sling</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🚬 Smoking / Vaping</div>
+          <div class="info-right">
+            <div class="info-location">Outdoors – green zones only</div>
+            <div class="info-notes">Designated green pavement columns away from vestibules · Cannabis prohibited on all airport property</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food & Beverage -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🍽 Food &amp; Beverage (pre-security)</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="info-row">
+          <div class="info-label">☕ Tim Hortons</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals</div>
+            <div class="info-notes">Coffee, donuts, bagels, sandwiches</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🍔 Wendy's</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals</div>
+            <div class="info-notes">Burgers and fries</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🥖 Subway</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals</div>
+            <div class="info-notes">Sandwiches and salads, made to order</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🍟 Smoke's Poutinerie</div>
+          <div class="info-right">
+            <div class="info-location">L1 Arrivals</div>
+            <div class="info-notes">Classic and loaded poutine</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">☕ Starbucks</div>
+          <div class="info-right">
+            <div class="info-location">L2 Departures</div>
+            <div class="info-notes">Espresso drinks, teas, pastries, snacks</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">🥗 Freshii</div>
+          <div class="info-right">
+            <div class="info-location">L2 Departures</div>
+            <div class="info-notes">Salads, bowls, burritos, wraps</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /t3 -->
+
+</main>
+
+<footer>
+  Toronto Pearson International Airport<br>
+  For volunteer use only · Verify details with current official signage
+</footer>
+
+<script>
+  function switchTab(terminal) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.terminal-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector(`[onclick="switchTab('${terminal}')"]`).classList.add('active');
+    document.getElementById(terminal).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    const isCollapsed = header.classList.contains('collapsed');
+    if (isCollapsed) {
+      header.classList.remove('collapsed');
+      body.style.display = '';
+    } else {
+      header.classList.add('collapsed');
+      body.style.display = 'none';
+    }
+  }
+</script>
+
+</body>
+</html>
