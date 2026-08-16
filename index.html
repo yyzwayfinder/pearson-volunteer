@@ -469,6 +469,57 @@
       margin-top: 6px;
       line-height: 1.5;
     }
+    /* ── INFO TAB ── */
+    .info-panel { display: none; }
+    .info-panel.active { display: block; }
+
+    .link-group {
+      margin-bottom: 20px;
+    }
+
+    .link-group-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 0 4px 8px;
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      border-left: 3px solid var(--lime);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .link-card-left { flex: 1; }
+
+    .link-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 3px;
+    }
+
+    .link-card-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .link-arrow {
+      font-size: 18px;
+      color: var(--lime);
+      margin-left: 12px;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -488,6 +539,7 @@
   <div class="tabs">
     <div class="tab active" onclick="switchTab('t1')">✈ Terminal 1</div>
     <div class="tab" onclick="switchTab('t3')">✈ Terminal 3</div>
+    <div class="tab" onclick="switchTab('info')">ℹ️ Info</div>
   </div>
 </header>
 
@@ -1078,6 +1130,53 @@
 
   </div><!-- /t3 -->
 
+  <div id="info" class="info-panel">
+
+    <div class="link-group">
+      <div class="link-group-title">✈ Airlines &amp; Terminals</div>
+      <a class="link-card" href="https://www.torontopearson.com/en/airlines" target="_blank">
+        <div class="link-card-left">
+          <div class="link-card-title">Airline Terminal Directory</div>
+          <div class="link-card-desc">Which terminal does each airline operate from? Full list of 55+ airlines.</div>
+        </div>
+        <div class="link-arrow">↗</div>
+      </a>
+    </div>
+
+    <div class="link-group">
+      <div class="link-group-title">🛬 Flight Information</div>
+      <a class="link-card" href="https://www.torontopearson.com/en/arrivals" target="_blank">
+        <div class="link-card-left">
+          <div class="link-card-title">Live Arrivals Board</div>
+          <div class="link-card-desc">Real-time arrival status for all flights into YYZ.</div>
+        </div>
+        <div class="link-arrow">↗</div>
+      </a>
+      <a class="link-card" href="https://www.torontopearson.com/en/departures" target="_blank">
+        <div class="link-card-left">
+          <div class="link-card-title">Live Departures Board</div>
+          <div class="link-card-desc">Real-time departure status for all flights out of YYZ.</div>
+        </div>
+        <div class="link-arrow">↗</div>
+      </a>
+    </div>
+        <div class="link-arrow">↗</div>
+      </a>
+    </div>
+
+    <div class="link-group">
+      <div class="link-group-title">🚌 Transit</div>
+      <a class="link-card" href="https://www.torontopearson.com/en/transportation-and-parking/public-transit-buses" target="_blank">
+        <div class="link-card-left">
+          <div class="link-card-title">Public Transit Schedule</div>
+          <div class="link-card-desc">Bus routes and schedules serving Toronto Pearson.</div>
+        </div>
+        <div class="link-arrow">↗</div>
+      </a>
+    </div>
+
+  </div><!-- /info -->
+
 </main>
 
 <footer>
@@ -1089,8 +1188,10 @@
   function switchTab(terminal) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.terminal-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.info-panel').forEach(p => p.classList.remove('active'));
     document.querySelector(`[onclick="switchTab('${terminal}')"]`).classList.add('active');
-    document.getElementById(terminal).classList.add('active');
+    const panel = document.getElementById(terminal);
+    if (panel) panel.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
