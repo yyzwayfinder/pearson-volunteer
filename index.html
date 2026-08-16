@@ -421,6 +421,54 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ── RENTAL CAR SECTION ── */
+    .rental-group {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .rental-group:last-child { border-bottom: none; }
+
+    .rental-group-header {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--lime);
+      margin-bottom: 6px;
+    }
+
+    .rental-group-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .rental-companies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .rental-chip {
+      background: rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 4px 9px;
+      font-size: 12px;
+      color: var(--offwhite);
+    }
+
+    .rental-chip.special {
+      background: rgba(200,224,26,0.15);
+      color: var(--lime);
+    }
+
+    .rental-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
@@ -542,7 +590,42 @@
         </div>
         <div class="transport-row">
           <div class="transport-type">🚗 Rental Cars</div>
-          <div class="transport-dest">South Bridge (L2) – cross pedestrian bridge to parking garage · Rental car counters are located on Level 1 of the parking garage</div>
+          <div class="transport-dest">South Bridge (L2) → parking garage · See Rental Cars section below</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rental Cars T1 -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🚗 Rental Cars</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="rental-group">
+          <div class="rental-group-header">On-Site — T1 Parking Garage Level 1</div>
+          <div class="rental-group-sub">South Bridge (L2) → cross pedestrian bridge → counters on Garage L1</div>
+          <div class="rental-companies">
+            <span class="rental-chip">Avis</span>
+            <span class="rental-chip">Budget</span>
+            <span class="rental-chip">Dollar</span>
+            <span class="rental-chip">Thrifty</span>
+            <span class="rental-chip">Enterprise</span>
+            <span class="rental-chip">Hertz</span>
+            <span class="rental-chip">National</span>
+            <span class="rental-chip">Alamo</span>
+          </div>
+        </div>
+        <div class="rental-group">
+          <div class="rental-group-header">⭐ Advantage — Curbside on Request</div>
+          <div class="rental-companies">
+            <span class="rental-chip special">Curbside pickup at T1 or T3 upon request</span>
+          </div>
+        </div>
+        <div class="rental-group">
+          <div class="rental-group-header">Off-Site — Viscount Station</div>
+          <div class="rental-group-sub">Terminal Link Train → Viscount Station → call from station phone</div>
+          <div class="rental-note">ACE · City Car &amp; Truck · Economy · Europcar/Routes · EZ · Fox · Green Motion · Holiday · Jet · MEX/Zoom · NEXTCAR · NÜ · Orbit · Payless · Peel · Priceless/Swift · Roadstar · SIXT · SurPrice · Yesaway · York and others</div>
         </div>
       </div>
     </div>
@@ -813,7 +896,38 @@
         </div>
         <div class="transport-row">
           <div class="transport-type">🚗 Rental Cars</div>
-          <div class="transport-dest">Parking Garage L1 (follow signs) · Avis, Budget, Dollar, Thrifty, Enterprise, Hertz, National, Alamo</div>
+          <div class="transport-dest">See Rental Cars section below</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rental Cars T3 -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-title">🚗 Rental Cars</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="rental-group">
+          <div class="rental-group-header">On-Site — T3</div>
+          <div class="rental-companies">
+            <span class="rental-chip">Hertz <small style="color:var(--muted)">Door F</small></span>
+            <span class="rental-chip">Enterprise <small style="color:var(--muted)">Door F</small></span>
+            <span class="rental-chip">Avis <small style="color:var(--muted)">Door B</small></span>
+            <span class="rental-chip">Budget <small style="color:var(--muted)">Door B</small></span>
+            <span class="rental-chip">National/Alamo <small style="color:var(--muted)">Across from Arrivals Tunnel</small></span>
+          </div>
+        </div>
+        <div class="rental-group">
+          <div class="rental-group-header">⭐ Advantage — Curbside on Request</div>
+          <div class="rental-companies">
+            <span class="rental-chip special">Curbside pickup at T1 or T3 upon request</span>
+          </div>
+        </div>
+        <div class="rental-group">
+          <div class="rental-group-header">Off-Site — Viscount Station</div>
+          <div class="rental-group-sub">Terminal Link Train (L3) → Viscount Station → call from station phone</div>
+          <div class="rental-note">ACE · City Car &amp; Truck · Economy · Europcar/Routes · EZ · Fox · Green Motion · Holiday · Jet · MEX/Zoom · NEXTCAR · NÜ · Orbit · Payless · Peel · Priceless/Swift · Roadstar · SIXT · SurPrice · Yesaway · York and others</div>
         </div>
       </div>
     </div>
